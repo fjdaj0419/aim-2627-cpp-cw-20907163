@@ -18,8 +18,29 @@ namespace aim::q1 {
 
 
 // BEGIN IMPLEMENTATION
-long long ratio(long long hp, long long max_hp) { throw std::runtime_error("TODO"); }
-std::string report(int id, long long hp, long long max_hp, int battery) { throw std::runtime_error("TODO"); }
+long long ratio(long long hp, long long max_hp) {
+    if (max_hp <= 0) return -1;                      // 最大值无效，不除法
+    if (hp < 0) hp = 0;                              // 负血量先归零
+    if (hp > max_hp) hp = max_hp;                    // 超过上限先夹到上限
+    return hp * 100 / max_hp;                        // 整数部分，截断不四舍五入
+}
+
+std::string report(int id, long long hp, long long max_hp, int battery) {
+    std::string hp_field;
+    if (max_hp <= 0) {
+        hp_field = "INVALID";                        // 最大血量无效时 HP 写 INVALID
+    } else {
+        hp_field = std::to_string(ratio(hp, max_hp));// 否则写整数百分比
+    }
+    int b = battery;                                 // 局部副本，不改动入参
+    if (b < 0) b = 0;                                // 电量夹到 [0,100]
+    if (b > 100) b = 100;
+    std::string state;
+    if (b >= 60) state = "OK";                       // >=60 OK
+    else if (b >= 20) state = "WARNING";             // 20..59 WARNING
+    else state = "LOW";                              // <20 LOW
+    return "ID=" + std::to_string(id) + ";HP=" + hp_field + ";BAT=" + std::to_string(b) + ";STATE=" + state;
+}
 // END IMPLEMENTATION
 }
 

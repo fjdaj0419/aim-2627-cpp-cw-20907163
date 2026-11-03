@@ -15,10 +15,68 @@
 
 // Assessment 01 Q2; see 题面.pdf.
 namespace aim::q2 {
-struct LabelEdit { std::string from; std::string to; };
+struct LabelEdit { 
+        std::string from; std::string to; 
+};
 
 // BEGIN IMPLEMENTATION
-std::string edit_labels(std::string labels, const std::vector<LabelEdit>& edits) { throw std::runtime_error("TODO"); }
+using namespace std;
+std::string edit_labels(std::string labels, const std::vector<LabelEdit>& edits) { 
+    if (labels.empty()) return labels;
+    if (edits.empty()) return labels;
+    std::vector<std::string> tags;
+    if (!labels.empty()) {
+        std::size_t start = 0;
+        while (true) {
+            std::size_t pos = labels.find(',', start);
+            if (pos == std::string::npos) {
+                tags.push_back(labels.substr(start));
+                break;
+            }
+            tags.push_back(labels.substr(start, pos - start));
+            start = pos + 1;
+        }
+    }
+     for (const LabelEdit& edit : edits) {
+        if (edit.from.empty()) {
+            if (!edit.to.empty()) {
+                tags.push_back(edit.to);
+            }
+            continue;
+        }
+        // 找第一个完整等于 from 的标签
+        std::size_t index = tags.size();
+        for (std::size_t i = 0; i < tags.size(); ++i) {
+            if (tags[i] == edit.from) {
+                index = i;
+                break;
+            }
+        }
+
+        // 没找到，不修改
+        if (index == tags.size()) {
+            continue;
+        }
+
+        // 找到后：to 为空则删除，否则替换
+        if (edit.to.empty()) {
+            tags.erase(tags.begin() + index);
+        } else {
+            tags[index] = edit.to;
+        }
+    }
+
+    // 3. 用逗号拼回去
+    std::string result;
+    for (std::size_t i = 0; i < tags.size(); ++i) {
+        if (i > 0) {
+            result += ',';
+        }
+        result += tags[i];
+    }
+
+    return result;
+    throw std::runtime_error("TODO"); }
 // END IMPLEMENTATION
 }
 

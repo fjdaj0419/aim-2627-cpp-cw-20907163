@@ -18,9 +18,26 @@ namespace aim::q3 {
 
 
 // BEGIN IMPLEMENTATION
-std::vector<int> alarms(const std::vector<int>& values, int k, long long threshold) { throw std::runtime_error("TODO"); }
+std::vector<int> alarms(const std::vector<int>& values, int k, long long threshold) { 
+  if (values.empty()) return {};
+    if (k < 1 || k > static_cast<int>(values.size())) return {};
+    std::vector<int> number;
+    long long sum = 0;
+    for (int j = 0; j < k; ++j) {
+        sum += values[j];
+    }
+    if (sum > threshold) number.push_back(k - 1);
+    for (int i = 1; i + k - 1 < static_cast<int>(values.size()); ++i) {
+        sum += static_cast<long long>(values[i + k - 1])  
+             - static_cast<long long>(values[i - 1]);     
+        if (sum > threshold) number.push_back(i + k - 1);
+    }
+    return number;
+    }
+ }
+
 // END IMPLEMENTATION
-}
+
 
 #define CHECK(...) do { if (!(__VA_ARGS__)) throw std::runtime_error("check failed"); } while(false)
 #define EXPECT_INVALID(...) do { bool caught=false; try { (void)(__VA_ARGS__); } catch(const std::invalid_argument&) { caught=true; } CHECK(caught); } while(false)
