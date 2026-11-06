@@ -18,7 +18,32 @@ namespace aim::b1 {
 
 
 // BEGIN IMPLEMENTATION
+using namespace std;
 bool parse_i32(const std::string& text, int& output) { throw std::runtime_error("TODO"); }
+int ratio (int hp, int max_hp) { 
+    if (hp<=0 || max_hp<=0) {
+        return -1;
+    }
+    max_hp = max(0,max_hp);
+    
+    return hp*100/max_hp; }
+
+    string report(int id, long long hp, long long max_hp, int battery) { 
+    battery = max(0,battery);
+    battery = min(100,battery);
+    if (battery>=60) {
+        cout << "ID=" << id << ";" <<"HP=" << hp << ";" <<"BAT=" << battery << ";" <<"BATTERY=" << "OK" << ";" <<endl;
+    }
+    else if (battery>=20 && battery<60) {
+        cout << "ID=" << id << ";" <<"HP=" << hp << ";" <<"BAT=" << battery << ";" <<"BATTERY=" << "WARNING" << ";" <<endl;
+    }
+    else {
+        cout << "ID=" << id << ";" <<"HP=" << hp << ";" <<"BAT=" << battery << ";" <<"BATTERY=" << "CRITICAL" << ";" <<endl;
+    }
+   
+   
+   
+}
 // END IMPLEMENTATION
 }
 
