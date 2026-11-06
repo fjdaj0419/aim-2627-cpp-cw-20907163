@@ -18,7 +18,78 @@ namespace aim::q6 {
 struct Target { int id; int x; int y; int hp; bool visible; };
 
 // BEGIN IMPLEMENTATION
-int select_target(const std::vector<Target>& targets, int max_range) { throw std::runtime_error("TODO"); }
+int select_target(const std::vector<Target>& targets, int max_range) { 
+    //最多 100000 个目标；id 非负且互不相同，x、y 绝对值 ≤106，hp∈[-100,100]，visible 为 bool。
+    //如果 targets 为空或 max_range 小于 0，返回 -1。
+    if(targets.empty() || max_range<0){
+        return -1;
+    }
+    const long long r2 = 1LL * max_range * max_range;
+    std::vector<Target> AVAILABLE;
+    for(int i=0;i<(int)targets.size();i++){
+        const long long dx = targets[i].x;
+        const long long dy = targets[i].y;
+        if(targets[i].visible && targets[i].hp>0 && dx*dx+dy*dy<=r2){
+            AVAILABLE.push_back(targets[i]);
+        }
+    }
+    std::vector<Target> minIdx; 
+    std::vector<Target> minIdx2;
+    int ans = -1;
+
+    if (AVAILABLE.empty()) {
+        return -1;
+    }
+
+    // 2. 找最低血量，并收集所有最低血量的目标
+    int minHp = INT_MAX;
+    for (const auto& t : AVAILABLE) {
+        if (t.hp < minHp) {
+            minHp = t.hp;
+        }
+    }
+
+    for (int i = 0; i < (int)AVAILABLE.size(); ++i) {
+        if (AVAILABLE[i].hp == minHp) {
+            minIdx.push_back(AVAILABLE[i]);
+        }
+    }
+
+    // 3. 在最低血量的目标中，寻找最近的距离平方
+    long long mindistance = LLONG_MAX;
+    for (const auto& t : minIdx) {
+        const long long dx = t.x;
+        const long long dy = t.y;
+        const long long dist_sq = dx*dx + dy*dy;
+        if (dist_sq < mindistance) {
+            mindistance = dist_sq;
+        }
+    }
+    // 4. 收集距离平方等于最小值的候选
+    for (const auto& t : minIdx) {
+        const long long dx = t.x;
+        const long long dy = t.y;
+        const long long dist_sq = dx*dx + dy*dy;
+        if (dist_sq == mindistance) {
+            minIdx2.push_back(t);
+        }
+    }
+
+    // 5. 在距离相同的候选中，选择最小 id
+    int minid = INT_MAX;
+    for (const auto& t : minIdx2) {
+        if (t.id < minid) {
+            minid = t.id;
+        }
+    }
+    for (const auto& t : minIdx2) {
+        if (t.id == minid) {
+            ans = t.id;
+        }
+    }
+
+    return ans;
+}
 // END IMPLEMENTATION
 }
 
