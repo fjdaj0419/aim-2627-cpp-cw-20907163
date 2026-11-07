@@ -78,7 +78,7 @@ std::vector<std::vector<int>> risk(const std::vector<std::string>& grid) {
 
     return ans;      
 }
-
+// END IMPLEMENTATION
 }
 
 #define CHECK(...) do { if (!(__VA_ARGS__)) throw std::runtime_error("check failed"); } while(false)
