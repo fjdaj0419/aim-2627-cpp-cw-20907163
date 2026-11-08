@@ -42,7 +42,7 @@ int select_target(const std::vector<Target>& targets, int max_range) {
     }
 
     // 2. 找最低血量，并收集所有最低血量的目标
-    int minHp = INT_MAX;
+    int minHp = std::numeric_limits<int>::max();
     for (const auto& t : AVAILABLE) {
         if (t.hp < minHp) {
             minHp = t.hp;
@@ -56,7 +56,7 @@ int select_target(const std::vector<Target>& targets, int max_range) {
     }
 
     // 3. 在最低血量的目标中，寻找最近的距离平方
-    long long mindistance = LLONG_MAX;
+    long long mindistance = std::numeric_limits<long long>::max();
     for (const auto& t : minIdx) {
         const long long dx = t.x;
         const long long dy = t.y;
@@ -76,7 +76,7 @@ int select_target(const std::vector<Target>& targets, int max_range) {
     }
 
     // 5. 在距离相同的候选中，选择最小 id
-    int minid = INT_MAX;
+    int minid = std::numeric_limits<int>::max();
     for (const auto& t : minIdx2) {
         if (t.id < minid) {
             minid = t.id;
