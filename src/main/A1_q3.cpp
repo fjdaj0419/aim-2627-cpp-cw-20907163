@@ -34,10 +34,10 @@ std::vector<int> alarms(const std::vector<int>& values, int k, long long thresho
     }
     return number;
     }
- }
+ 
 
 // END IMPLEMENTATION
-
+}
 
 #define CHECK(...) do { if (!(__VA_ARGS__)) throw std::runtime_error("check failed"); } while(false)
 #define EXPECT_INVALID(...) do { bool caught=false; try { (void)(__VA_ARGS__); } catch(const std::invalid_argument&) { caught=true; } CHECK(caught); } while(false)
